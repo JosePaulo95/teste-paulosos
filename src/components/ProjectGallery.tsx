@@ -25,7 +25,7 @@ const ProjectGallery: React.FC<ProjectGalleryProps> = ({ slug, className }) => {
     return (
       <div className={className}>
         <p className="text-muted-foreground">Nenhuma imagem disponível para este projeto.</p>
-        <p className="text-sm text-muted-foreground mt-2">Dicas: verifique o nome da pasta em <code>src/assets/projects/{`<slug>`}</code> e extensões (.jpg/.JPG)</p>
+        <p className="text-sm text-muted-foreground mt-2">Dicas: verifique o nome da pasta em <code>public/assets/projects/{`<slug>`}</code> e extensões (.jpg/.JPG)</p>
       </div>
     );
   }

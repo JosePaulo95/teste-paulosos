@@ -1,12 +1,13 @@
 import { useState } from "react";
 import Layout from "@/components/Layout";
 import ProjectCard from "@/components/ProjectCard";
-import heroImage from "@/assets/hero-graduation.jpg";
-import projectTheater from "@/assets/project-theater.jpg";
-import projectAfropunk from "@/assets/project-afropunk.jpg";
-import projectCoral from "@/assets/project-coral.jpg";
-import projectPalestra from "@/assets/project-palestra.jpg";
-import projectDesfile from "@/assets/project-desfile.jpg";
+
+const heroImage = "/assets/hero-graduation.jpg";
+const projectTheater = "/assets/project-theater.jpg";
+const projectAfropunk = "/assets/project-afropunk.jpg";
+const projectCoral = "/assets/project-coral.jpg";
+const projectPalestra = "/assets/project-palestra.jpg";
+const projectDesfile = "/assets/project-desfile.jpg";
 
 const allProjects = [
   {

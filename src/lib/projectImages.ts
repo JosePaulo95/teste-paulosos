@@ -1,12 +1,32 @@
+// Mapeamento estático dos arquivos de cada projeto em public/assets/projects/
+const projectFiles: Record<string, string[]> = {
+  afropunk: [
+    '/assets/projects/afropunk/@_parecer.pauloIMG_1718.jpg',
+    '/assets/projects/afropunk/@_parecer.pauloIMG_2338.jpg',
+  ],
+  coral: [
+    '/assets/projects/coral/@_parecer.pauloIMG_0284.jpg',
+    '/assets/projects/coral/@_parecer.pauloIMG_0297.jpg',
+  ],
+  desfile: [
+    '/assets/projects/desfile/@_parecer.paulo@_parecer.paulo_MG_4364.jpg',
+    '/assets/projects/desfile/@_parecer.paulo@_parecer.paulo_MG_4702.jpg',
+  ],
+  graduation: [
+    '/assets/projects/graduation/@_parecer.paulo_MG_0062.jpg',
+    '/assets/projects/graduation/@_parecer.paulo_MG_9883.jpg',
+  ],
+  palestras: [
+    '/assets/projects/palestras/@_parecer.pauloIMG_4193.jpg',
+    '/assets/projects/palestras/@_parecer.pauloIMG_4205.jpg',
+  ],
+  theater: [
+    '/assets/projects/theater/@_parecer.paulo_MG_0242.jpg',
+    '/assets/projects/theater/@_parecer.paulo_MG_1629.jpg',
+  ],
+};
+
 export function getProjectImages(slug: string): string[] {
-  // Import all files under src/assets/projects eagerly as urls.
-  // We'll filter by image extensions (case-insensitive) below.
-  const modules = import.meta.glob('/src/assets/projects/**/*', { eager: true, as: 'url' }) as Record<string, string>;
-
-  const images: Array<{ path: string; url: string }> = [];
-
-  const imageRE = /\.(jpe?g|png|webp|svg)$/i;
-
   // Try several candidate folder names: the slug itself and known aliases
   const aliases: Record<string, string> = {
     formaturas: 'graduation',
@@ -15,50 +35,26 @@ export function getProjectImages(slug: string): string[] {
     'coral-natalino': 'coral',
   };
 
-  const candidates = [slug];
-  if (aliases[slug]) candidates.push(aliases[slug]);
+  const projectKey = aliases[slug] || slug;
+  const images = projectFiles[projectKey] || [];
 
-  // Normalize and collect matching image files for the given slug or its aliases
-  Object.entries(modules).forEach(([rawPath, url]) => {
-    // rawPath can start with '/' or './' depending on environment; normalize to no leading './' or '/'
-    const path = rawPath.replace(/^\.\//, '').replace(/^\//, '');
-
-    if (!imageRE.test(path)) return;
-
-    const lp = path.toLowerCase();
-    const base = 'src/assets/projects/';
-
-    for (const cand of candidates) {
-      if (lp.includes(base + cand.toLowerCase() + '/')) {
-        images.push({ path, url });
-        break;
-      }
+  // Debug logs
+  if (typeof window !== 'undefined') {
+    if (images.length === 0) {
+      // eslint-disable-next-line no-console
+      console.warn(`[getProjectImages] slug=${slug} matched 0 files. Available projects:`, Object.keys(projectFiles));
+    } else {
+      // eslint-disable-next-line no-console
+      console.debug(`[getProjectImages] slug=${slug} matched ${images.length} files`);
     }
-  });
-
-  // If nothing matched, provide a helpful debug list of available project folders
-  if (images.length === 0 && typeof window !== 'undefined') {
-    const folders = new Set<string>();
-    Object.keys(modules).forEach(k => {
-      const p = k.replace(/^\.\//, '').replace(/^\//, '');
-      const m = p.match(/src\/assets\/projects\/([^\/]+)\//i);
-      if (m) folders.add(m[1]);
-    });
-    // eslint-disable-next-line no-console
-    console.warn(`[getProjectImages] slug=${slug} matched 0 files. Available folders:`, Array.from(folders));
-  } else if (typeof window !== 'undefined') {
-    // eslint-disable-next-line no-console
-    console.debug(`[getProjectImages] slug=${slug} matched ${images.length} files:`, images.map(i => i.path));
   }
 
   // Sort by filename (natural numeric order)
-  images.sort((a, b) => {
-    const aName = a.path.split('/').pop() || '';
-    const bName = b.path.split('/').pop() || '';
+  return [...images].sort((a, b) => {
+    const aName = a.split('/').pop() || '';
+    const bName = b.split('/').pop() || '';
     return aName.localeCompare(bName, undefined, { numeric: true, sensitivity: 'base' });
   });
-
-  return images.map(i => i.url);
 }
 
 export default getProjectImages;

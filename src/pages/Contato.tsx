@@ -56,32 +56,24 @@ const Contato = () => {
         <div className="container mx-auto px-4 md:px-6">
           <h2 className="font-display text-2xl mb-6">Galeria</h2>
 
-          {/* Carrega imagens estáticas da pasta src/assets/projects via Vite */}
-          {
-            // eslint-disable-next-line @typescript-eslint/no-var-requires
-          }
-          {/* @ts-ignore */}
+          {/* Carrega imagens estáticas da pasta public/assets/projects */}
           {(() => {
             // Mostrar uma imagem por projeto (pasta) — prioriza uma miniatura representativa
             const GALLERY_LIMIT = 12; // quantidade máxima de projetos mostrados
-            const modules = import.meta.glob('/src/assets/projects/**/*', { eager: true, as: 'url' }) as Record<string, string>;
-            const imageRE = /\.(jpe?g|png|webp|svg)$/i;
-
-            // Agrupa urls por pasta de projeto
-            const byProject = new Map<string, string[]>();
-
-            Object.entries(modules).forEach(([rawPath, url]) => {
-              const path = rawPath.replace(/^\.\//, '').replace(/^\//, '');
-              if (!imageRE.test(path)) return;
-              const m = path.match(/src\/assets\/projects\/([^\/]+)\//i);
-              const folder = m ? m[1] : 'others';
-              if (!byProject.has(folder)) byProject.set(folder, []);
-              byProject.get(folder)!.push(url);
-            });
+            
+            // Lista de projetos com suas primeiras imagens
+            const projectImages: Record<string, string> = {
+              afropunk: '/assets/projects/afropunk/@_parecer.pauloIMG_1718.jpg',
+              coral: '/assets/projects/coral/@_parecer.pauloIMG_0284.jpg',
+              desfile: '/assets/projects/desfile/@_parecer.paulo@_parecer.paulo_MG_4364.jpg',
+              graduation: '/assets/projects/graduation/@_parecer.paulo_MG_0062.jpg',
+              palestras: '/assets/projects/palestras/@_parecer.pauloIMG_4193.jpg',
+              theater: '/assets/projects/theater/@_parecer.paulo_MG_0242.jpg',
+            };
 
             // Para cada projeto pegue a primeira imagem ordenada por nome de pasta
-            const projects = Array.from(byProject.keys()).sort();
-            const representative: string[] = projects.map((p) => byProject.get(p)![0]).filter(Boolean);
+            const projects = Object.keys(projectImages).sort();
+            const representative: string[] = projects.map((p) => projectImages[p]).filter(Boolean);
 
             // Limita ao número definido
             const limited = representative.slice(0, GALLERY_LIMIT);

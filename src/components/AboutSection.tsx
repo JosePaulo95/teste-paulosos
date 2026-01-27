@@ -1,10 +1,11 @@
 import React from 'react';
-import photographerPortrait from '@/assets/photographer-portrait.jpg';
-import projectAfropunk from '@/assets/project-afropunk.jpg';
-import projectCoral from '@/assets/project-coral.jpg';
 import { Camera, MapPin, Award } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+
+const photographerPortrait = '/assets/photographer-portrait.jpg';
+const projectAfropunk = '/assets/project-afropunk.jpg';
+const projectCoral = '/assets/project-coral.jpg';
 
 const AboutSection: React.FC = () => {
   return (
